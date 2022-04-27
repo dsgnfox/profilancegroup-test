@@ -12,7 +12,7 @@ const AddNewsForm = () => {
       content: '',
     },
     onSubmit: (values, { resetForm }) => {
-      const newNews = { ...values, id: uniqueId(), approved: false, createAt: new Date() }
+      const newNews = { ...values, id: uniqueId(), approved: false, createAt: new Date().toUTCString() }
       dispatch(add(newNews));
       resetForm({ value: '' });
     },

@@ -1,48 +1,64 @@
-import { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import AddNewsForm from './AddNewsForm';
+import { remove, update } from '../slices/newsSlice';
+import * as role from '../users/role';
 
-const createNewsItem = (item) => {
-  const { id, name, content, createAt } = item;
+const NewsItem = ({ user, news }) => {
+  const { id, name, content, createAt, approved } = news;
+  const date = new Date(createAt);
+  const dispatch = useDispatch();
+
   return (
-    <div key={id} className="news-item">
-      <h3>{name}</h3>
-      <p>{content}</p>
-      <p>{createAt.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <div className="news-item">
+      <div className="news-item__body">
+        <h3>{name}</h3>
+        <p>{content}</p>
+        <p>{date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      </div>
+      {
+      user.role === role.ADMIN
+        ? <div className="news-item__footer">
+            <div className="button-group">
+              {!approved ? <button type='button' className='button button_primary' onClick={() => dispatch(update({ id, changes: {approved: true} }))}>Одобрить</button> : null}
+              <button type='button' className='button button_danger' onClick={() => dispatch(remove({ id }))}>Удалить</button>
+            </div>
+          </div>
+        : null
+      }
     </div>
   );
 };
 
 const NewsPage = () => {
-  const inputEl = useRef(null);
-  const news = useSelector((state) => state.news);
   const [searchState, setSearchState] = useState('');
-  const foundNews = news.filter((item) => {
+  const { news, user } = useSelector((state) => state);
+  const newsForCurrentUser = user.role === role.GUEST ? news.filter((i) => i.approved) : news;
+  const foundNews = newsForCurrentUser.filter((item) => {
     if (searchState === '') {
       return item;
     }
     return item.name.includes(searchState);
   });
 
-  useEffect(() => {
-    inputEl.current.focus();
-  }, []);
-
   return (
     <>
       <h1>Новости</h1>
-      <form className='search-form'>
-        <input ref={inputEl}
-          type="text"
-          value={searchState}
-          onChange={(e) => setSearchState(e.target.value)}
-          className='search-form__input'
-          name="search-news"
-          placeholder="Введите название новости" />
-      </form>
-      <AddNewsForm />
+      {
+      foundNews.length > 0
+        ? <form className='search-form'>
+            <input type="text"
+              value={searchState}
+              onChange={(e) => setSearchState(e.target.value)}
+              className='search-form__input'
+              name="search-news"
+              placeholder="Введите название новости" />
+          </form>
+        : null
+      }
+      {user.role !== role.GUEST ? <AddNewsForm /> : null}
       <div className="news-container">
-        {foundNews.length > 0 ? foundNews?.map(createNewsItem) : <p>Новости не найдены ;(</p>}
+        {foundNews.length > 0 ? foundNews?.map((i) => <NewsItem key={i.id} user={user} news={i}/>) : <p>Новости не найдены ;(</p>}
       </div>
     </>
   );

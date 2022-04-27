@@ -11,15 +11,13 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logIn: (state, action) => {
-      debugger
       const { role, login } = action.payload;
-      state = { role, login };
+      state.role = role;
+      state.login = login;
     },
     logOut: (state) => {
-      state = {
-        role: role.GUEST,
-        login: null
-      }
+      state.role = role.GUEST;
+      state.login = null;
     }
   }
 });

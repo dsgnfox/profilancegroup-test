@@ -1,6 +1,6 @@
 import * as role from '../users/role';
 
-export default [
+const users = [
   {
     role: role.ADMIN,
     login: 'admin',
@@ -12,3 +12,5 @@ export default [
     password: 'user'
   }
 ];
+
+export default users;
