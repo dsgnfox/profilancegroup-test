@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AddNewsForm from './AddNewsForm';
 import { remove, update } from '../slices/newsSlice';
-import * as role from '../users/role';
+import * as userRoles from '../users/role';
 
 const NewsItem = ({ user, news }) => {
   const { id, name, content, createAt, approved } = news;
@@ -17,7 +17,7 @@ const NewsItem = ({ user, news }) => {
         <p>{date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
       </div>
       {
-      user.role === role.ADMIN
+      user.role === userRoles.ADMIN
         ? <div className="news-item__footer">
             <div className="button-group">
               {!approved ? <button type='button' className='button button_primary' onClick={() => dispatch(update({ id, changes: {approved: true} }))}>Одобрить</button> : null}
@@ -33,7 +33,7 @@ const NewsItem = ({ user, news }) => {
 const NewsPage = () => {
   const [searchState, setSearchState] = useState('');
   const { news, user } = useSelector((state) => state);
-  const newsForCurrentUser = user.role === role.GUEST ? news.filter((i) => i.approved) : news;
+  const newsForCurrentUser = user.role === userRoles.GUEST ? news.filter((i) => i.approved) : news;
   const foundNews = newsForCurrentUser.filter((item) => {
     if (searchState === '') {
       return item;
@@ -56,7 +56,7 @@ const NewsPage = () => {
           </form>
         : null
       }
-      {user.role !== role.GUEST ? <AddNewsForm /> : null}
+      {user.role !== userRoles.GUEST ? <AddNewsForm /> : null}
       <div className="news-container">
         {foundNews.length > 0 ? foundNews?.map((i) => <NewsItem key={i.id} user={user} news={i}/>) : <p>Новости не найдены ;(</p>}
       </div>

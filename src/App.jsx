@@ -51,7 +51,7 @@ const App = () => {
       </main>
       <footer className="footer">
         <div className="container">
-          <a className='link link_light' href="https://github.com/dsgnfox/profilancegroup-test/" target="_blank">dsgnfox</a> @ 2022
+          <a className='link link_light' href="https://github.com/dsgnfox/profilancegroup-test/" target="_blank" rel="noreferrer">dsgnfox</a> @ 2022
         </div>
       </footer>
       <Modal show={showModal} setShow={setShowModal}>

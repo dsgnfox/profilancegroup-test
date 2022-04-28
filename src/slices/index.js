@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import newsReducer from '../slices/newsSlice';
-import userSlice from '../slices/userSlice';
+import newsReducer from './newsSlice';
+import userSlice from './userSlice';
 
 export default configureStore({
   reducer: {
     news: newsReducer,
-    user: userSlice
+    user: userSlice,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });

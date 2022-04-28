@@ -13,7 +13,7 @@ const Modal = ({ show, setShow, children }) => {
     return () => {
         window.removeEventListener('click', clickOutsideContent);
     };
-  }, []);
+  }, [setShow]);
 
   return (
     <div ref={modalRef} className={`modal ${show ? 'active' : ''}`}>

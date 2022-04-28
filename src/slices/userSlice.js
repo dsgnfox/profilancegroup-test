@@ -1,9 +1,11 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
+
 import { createSlice } from '@reduxjs/toolkit';
-import * as role from '../users/role';
+import * as userRoles from '../users/role';
 
 const initialState = {
-  role: role.GUEST,
-  login: null
+  role: userRoles.GUEST,
+  login: null,
 };
 
 const userSlice = createSlice({
@@ -16,10 +18,10 @@ const userSlice = createSlice({
       state.login = login;
     },
     logOut: (state) => {
-      state.role = role.GUEST;
+      state.role = userRoles.GUEST;
       state.login = null;
-    }
-  }
+    },
+  },
 });
 
 export const { logIn, logOut } = userSlice.actions;
