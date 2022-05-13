@@ -18,13 +18,12 @@ const NewsItem = ({ user, news }) => {
       </div>
       {
       user.role === userRoles.ADMIN
-        ? <div className="news-item__footer">
+        && <div className="news-item__footer">
             <div className="button-group">
-              {!approved ? <button type='button' className='button button_primary' onClick={() => dispatch(update({ id, changes: {approved: true} }))}>Одобрить</button> : null}
+              {!approved && <button type='button' className='button button_primary' onClick={() => dispatch(update({ id, changes: [{name: 'approved', newValue: true}] }))}>Одобрить</button>}
               <button type='button' className='button button_danger' onClick={() => dispatch(remove({ id }))}>Удалить</button>
             </div>
           </div>
-        : null
       }
     </div>
   );
@@ -32,7 +31,8 @@ const NewsItem = ({ user, news }) => {
 
 const NewsPage = () => {
   const [searchState, setSearchState] = useState('');
-  const { news, user } = useSelector((state) => state);
+  const news = useSelector((state) => state.news.items);
+  const { user } = useSelector((state) => state);
   const newsForCurrentUser = user.role === userRoles.GUEST ? news.filter((i) => i.approved) : news;
   const foundNews = newsForCurrentUser.filter((item) => {
     if (searchState === '') {
@@ -46,7 +46,7 @@ const NewsPage = () => {
       <h1>Новости</h1>
       {
       foundNews.length > 0
-        ? <form className='search-form'>
+        && <form className='search-form'>
             <input type="text"
               value={searchState}
               onChange={(e) => setSearchState(e.target.value)}
@@ -54,9 +54,8 @@ const NewsPage = () => {
               name="search-news"
               placeholder="Введите название новости" />
           </form>
-        : null
       }
-      {user.role !== userRoles.GUEST ? <AddNewsForm /> : null}
+      {user.role !== userRoles.GUEST && <AddNewsForm />}
       <div className="news-container">
         {foundNews.length > 0 ? foundNews?.map((i) => <NewsItem key={i.id} user={user} news={i}/>) : <p>Новости не найдены ;(</p>}
       </div>

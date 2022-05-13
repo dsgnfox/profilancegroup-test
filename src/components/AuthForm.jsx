@@ -66,7 +66,7 @@ const AuthForm = ({ setShowModal }) => {
         <div className="form__row">
           <button className='button button_primary' type="submit">Добавить</button>
         </div>
-        {authFailed ? <div className='form__error'>Неверный логин или пароль</div> : null}
+        {authFailed && <div className='form__error'>Неверный логин или пароль</div>}
       </form>
     </>
   )
