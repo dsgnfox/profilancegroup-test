@@ -212,7 +212,8 @@ body {
   }
 
   &__content {
-      width: 500px;
+      max-width: 500px;
+      width: 100%;
       margin: 15% auto;
       padding: 10px 15px;
       background-color: #fff;
@@ -241,5 +242,9 @@ body {
       &:hover {
           color: #000;
       }
+  }
+
+  @media(max-width: $breakpoint-mobile) {
+    padding: 0 15px;
   }
 }
